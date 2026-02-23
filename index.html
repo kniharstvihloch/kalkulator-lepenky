@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Kalkulátor řezané lepenky</title>
+<style>
+body{
+  font-family: Arial;
+  max-width: 700px;
+  margin: 40px auto;
+}
+input, select{
+  padding:6px;
+  margin:5px 0;
+}
+.box{
+  background:#f3f3f3;
+  padding:15px;
+  margin-top:15px;
+}
+.total{
+  font-size:22px;
+  font-weight:bold;
+  margin-top:15px;
+}
+</style>
+</head>
+<body>
+
+<h2>Kalkulátor řezané knihařské lepenky</h2>
+
+<label>Síla lepenky:</label><br>
+<select id="tloustka">
+  <option value="14">1 mm (14 Kč / arch)</option>
+  <option value="21">1,5 mm (21 Kč / arch)</option>
+  <option value="25">2 mm (25 Kč / arch)</option>
+  <option value="30">2,5 mm (30 Kč / arch)</option>
+  <option value="35">3 mm (35 Kč / arch)</option>
+  <option value="43">3,5 mm (43 Kč / arch)</option>
+</select><br>
+
+<label>Šířka (mm):</label><br>
+<input type="number" id="sirka"><br>
+
+<label>Výška (mm):</label><br>
+<input type="number" id="vyska"><br>
+
+<label>Počet kusů:</label><br>
+<input type="number" id="pocet" value="1"><br>
+
+<div class="box" id="vysledek"></div>
+
+<div class="total" id="finalCena">Celková cena: 0 Kč</div>
+
+<script>
+
+const ARCH_SIRKA = 500;
+const ARCH_VYSKA = 700;
+
+function spocitat(){
+
+let sirka = parseFloat(document.getElementById("sirka").value);
+let vyska = parseFloat(document.getElementById("vyska").value);
+let pocet = parseInt(document.getElementById("pocet").value);
+let cenaArch = parseFloat(document.getElementById("tloustka").value);
+
+if(!sirka || !vyska || !pocet) return;
+
+let kusyA = Math.floor(ARCH_SIRKA / sirka) *
+            Math.floor(ARCH_VYSKA / vyska);
+
+let kusyB = Math.floor(ARCH_SIRKA / vyska) *
+            Math.floor(ARCH_VYSKA / sirka);
+
+let kusyNaArch = Math.max(kusyA, kusyB);
+
+if(kusyNaArch < 1){
+  document.getElementById("vysledek").innerHTML =
+  "Rozměr se nevejde do archu 500×700 mm.";
+  return;
+}
+
+let potrebneArchy = Math.ceil(pocet / kusyNaArch);
+let cenaMaterial = potrebneArchy * cenaArch;
+
+let cenaRezZaKus = 3;
+if(pocet >= 11 && pocet <= 100) cenaRezZaKus = 2;
+if(pocet >= 101) cenaRezZaKus = 1;
+
+let cenaRez = pocet * cenaRezZaKus;
+let final = cenaMaterial + cenaRez;
+
+document.getElementById("vysledek").innerHTML =
+"Na jeden arch se vejde: <b>" + kusyNaArch + " ks</b><br>" +
+"Potřebný počet archů: <b>" + potrebneArchy + "</b><br>" +
+"Cena materiálu: <b>" + cenaMaterial.toFixed(2) + " Kč</b><br>" +
+"Cena řezání: <b>" + cenaRez.toFixed(2) + " Kč</b>";
+
+document.getElementById("finalCena").innerHTML =
+"Celková cena: " + final.toFixed(2) + " Kč";
+
+}
+
+document.addEventListener("input", spocitat);
+document.addEventListener("change", spocitat);
+
+</script>
+
+</body>
+</html>
