@@ -3,28 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <title>Kalkulátor řezané lepenky</title>
+
 <style>
 body{
-  font-family: Arial;
-  max-width: 700px;
+  font-family: Arial, sans-serif;
+  max-width: 750px;
   margin: 40px auto;
 }
+
 input, select{
-  padding:6px;
-  margin:5px 0;
+  padding:8px;
+  margin:6px 0;
+  width: 200px;
 }
+
 .box{
-  background:#f3f3f3;
-  padding:15px;
+  background:#f5f5f5;
+  padding:18px;
+  margin-top:20px;
+  border-radius:8px;
+}
+
+.sectionTitle{
+  font-weight:bold;
+  margin-bottom:8px;
+  font-size:18px;
+}
+
+.total{
+  font-size:24px;
+  font-weight:bold;
+  margin-top:20px;
+}
+
+.buttonWrap{
   margin-top:15px;
 }
-.total{
-  font-size:22px;
+
+.bigButton{
+  display:inline-block;
+  padding:14px 22px;
+  margin:8px 8px 8px 0;
+  font-size:16px;
   font-weight:bold;
-  margin-top:15px;
+  border-radius:8px;
+  text-decoration:none;
+  cursor:pointer;
+  transition:0.3s;
+  border:none;
+}
+
+.green{
+  background:#2e7d32;
+  color:white;
+}
+
+.green:hover{
+  background:#1b5e20;
+}
+
+.blue{
+  background:#1565c0;
+  color:white;
+}
+
+.blue:hover{
+  background:#0d47a1;
+}
+
+.copyBtn{
+  background:#555;
+  color:white;
+  padding:8px 14px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+.copyBtn:hover{
+  background:#333;
+}
+
+.pulse{
+  animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(46,125,50,0.7);}
+  70%{box-shadow:0 0 0 12px rgba(46,125,50,0);}
+  100%{box-shadow:0 0 0 0 rgba(46,125,50,0);}
 }
 </style>
 </head>
+
 <body>
 
 <h2>Kalkulátor řezané knihařské lepenky</h2>
@@ -51,13 +123,9 @@ input, select{
 <div class="box" id="vysledek"></div>
 
 <div class="total" id="finalCena">Celková cena: 0 Kč</div>
-  
-<button onclick="prejitNaObjednavku()">Přejít na objednávku</button>
 
-<button onclick="window.open('https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru/', '_blank')">
-Otevřít produkt pro objednání
-</button>
-  
+<div class="box" id="akceBox" style="display:none;"></div>
+
 <script>
 
 const ARCH_SIRKA = 500;
@@ -71,8 +139,9 @@ let pocet = parseInt(document.getElementById("pocet").value);
 let cenaArch = parseFloat(document.getElementById("tloustka").value);
 
 if(!sirka || !vyska || !pocet){
-  document.getElementById("vysledek").innerHTML = "";
-  document.getElementById("finalCena").innerHTML = "Celková cena: 0 Kč";
+  document.getElementById("vysledek").innerHTML="";
+  document.getElementById("finalCena").innerHTML="Celková cena: 0 Kč";
+  document.getElementById("akceBox").style.display="none";
   return;
 }
 
@@ -85,9 +154,9 @@ let kusyB = Math.floor(ARCH_SIRKA / vyska) *
 let kusyNaArch = Math.max(kusyA, kusyB);
 
 if(kusyNaArch < 1){
-  document.getElementById("vysledek").innerHTML =
-  "Rozměr se nevejde do archu 500×700 mm.";
-  document.getElementById("finalCena").innerHTML = "Celková cena: 0 Kč";
+  document.getElementById("vysledek").innerHTML="Rozměr se nevejde do archu 500×700 mm.";
+  document.getElementById("finalCena").innerHTML="Celková cena: 0 Kč";
+  document.getElementById("akceBox").style.display="none";
   return;
 }
 
@@ -102,53 +171,52 @@ let cenaRez = pocet * cenaRezZaKus;
 let final = cenaMaterial + cenaRez;
 
 document.getElementById("vysledek").innerHTML =
-"Na jeden arch se vejde: <b>" + kusyNaArch + " ks</b><br>" +
-"Potřebný počet archů: <b>" + potrebneArchy + "</b><br>" +
-"Cena materiálu: <b>" + cenaMaterial.toFixed(2) + " Kč</b><br>" +
-"Cena řezání: <b>" + cenaRez.toFixed(2) + " Kč</b>";
-
-let finalRounded = Math.round(final);
+"Na jeden arch se vejde: <b>"+kusyNaArch+" ks</b><br>" +
+"Potřebný počet archů: <b>"+potrebneArchy+"</b><br>" +
+"Cena materiálu: <b>"+cenaMaterial+" Kč</b><br>" +
+"Cena řezání: <b>"+cenaRez+" Kč</b>";
 
 document.getElementById("finalCena").innerHTML =
-"<div style='font-size:22px;font-weight:bold;'>Celková cena: " 
-+ finalRounded + " Kč</div>" +
+"Celková cena: "+Math.round(final)+" Kč";
 
-"<div style='margin-top:15px;padding:15px;background:#e8f5e9;border:2px solid #2e7d32;'>" +
-"<strong>👉 Pro objednání:</strong><br>" +
-"Na stránce produktu zadejte do pole <strong>MNOŽSTVÍ</strong> hodnotu:<br><br>" +
-"<span style='font-size:28px;font-weight:bold;color:#2e7d32;'>" 
-+ finalRounded + "</span><br><br>" +
-"(Produkt má cenu 1 Kč, množství = výsledná cena v Kč)" +
+let specifikace =
+"ŘEZÁNÍ NA MÍRU\n" +
+"Rozměr: "+sirka+" × "+vyska+" mm\n" +
+"Počet kusů: "+pocet+"\n" +
+"Síla: "+document.getElementById("tloustka").selectedOptions[0].text+"\n" +
+"Počet archů: "+potrebneArchy+"\n" +
+"Cena řezání: "+cenaRez+" Kč";
+
+document.getElementById("akceBox").style.display="block";
+document.getElementById("akceBox").innerHTML =
+
+"<div class='sectionTitle'>📦 Materiál</div>" +
+"Potřebujete <b>"+potrebneArchy+" ks</b> archů 500×700 mm.<br>" +
+"<div class='buttonWrap'>" +
+"<a href='https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>" +
+"</div>" +
+
+"<hr style='margin:20px 0;'>" +
+
+"<div class='sectionTitle'>✂ Řezání</div>" +
+"Cena řezání: <b>"+cenaRez+" Kč</b><br>" +
+"U produktu „Řezání na míru“ zadejte množství: <b>"+cenaRez+"</b><br>" +
+"<div class='buttonWrap'>" +
+"<a href='https://www.kniharstvijihlava.cz/e-shop/rezani-na-miru/' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a>" +
+"<br><button class='copyBtn' onclick='kopirovat()'>📋 Kopírovat specifikaci</button>" +
 "</div>";
 
+window.aktualniText = specifikace;
+
+}
+
+function kopirovat(){
+navigator.clipboard.writeText(window.aktualniText);
+alert("Specifikace zkopírována do schránky.");
 }
 
 document.addEventListener("input", spocitat);
 document.addEventListener("change", spocitat);
-
-function prejitNaObjednavku(){
-
-let sirka = document.getElementById("sirka").value;
-let vyska = document.getElementById("vyska").value;
-let pocet = document.getElementById("pocet").value;
-let cenaText = document.getElementById("finalCena").innerText;
-
-if(!sirka || !vyska || !pocet){
-  alert("Nejprve vyplňte všechny údaje.");
-  return;
-}
-
-let text =
-"ŘEZÁNÍ NA MÍRU\n" +
-"Rozměr: " + sirka + " × " + vyska + " mm\n" +
-"Počet: " + pocet + " ks\n\n" +
-cenaText;
-
-alert("Zkopírujte si tuto konfiguraci do poznámky objednávky:\n\n" + text);
-
-window.location.href = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru/";
-
-}
 
 </script>
 
