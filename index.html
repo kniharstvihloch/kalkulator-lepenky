@@ -70,7 +70,11 @@ let vyska = parseFloat(document.getElementById("vyska").value);
 let pocet = parseInt(document.getElementById("pocet").value);
 let cenaArch = parseFloat(document.getElementById("tloustka").value);
 
-if(!sirka || !vyska || !pocet) return;
+if(!sirka || !vyska || !pocet){
+  document.getElementById("vysledek").innerHTML = "";
+  document.getElementById("finalCena").innerHTML = "Celková cena: 0 Kč";
+  return;
+}
 
 let kusyA = Math.floor(ARCH_SIRKA / sirka) *
             Math.floor(ARCH_VYSKA / vyska);
@@ -83,6 +87,7 @@ let kusyNaArch = Math.max(kusyA, kusyB);
 if(kusyNaArch < 1){
   document.getElementById("vysledek").innerHTML =
   "Rozměr se nevejde do archu 500×700 mm.";
+  document.getElementById("finalCena").innerHTML = "Celková cena: 0 Kč";
   return;
 }
 
@@ -120,7 +125,7 @@ document.getElementById("finalCena").innerHTML =
 
 document.addEventListener("input", spocitat);
 document.addEventListener("change", spocitat);
-  
+
 function prejitNaObjednavku(){
 
 let sirka = document.getElementById("sirka").value;
@@ -136,7 +141,7 @@ if(!sirka || !vyska || !pocet){
 let text =
 "ŘEZÁNÍ NA MÍRU\n" +
 "Rozměr: " + sirka + " × " + vyska + " mm\n" +
-"Počet: " + pocet + " ks\n" +
+"Počet: " + pocet + " ks\n\n" +
 cenaText;
 
 alert("Zkopírujte si tuto konfiguraci do poznámky objednávky:\n\n" + text);
@@ -144,16 +149,7 @@ alert("Zkopírujte si tuto konfiguraci do poznámky objednávky:\n\n" + text);
 window.location.href = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru/";
 
 }
-let url = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru" +
-"?sirka=" + sirka +
-"&vyska=" + vyska +
-"&pocet=" + pocet +
-"&tloustka=" + tloustka +
-"&cena=" + encodeURIComponent(cena);
 
-window.location.href = url;
-
-}
 </script>
 
 </body>
