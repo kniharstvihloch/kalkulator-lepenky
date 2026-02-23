@@ -192,12 +192,8 @@ let kusyB=Math.floor(aktualni.sirka/vyska)*Math.floor(aktualni.vyska/sirka);
 let kusyNaArch;
 let otoceno=false;
 
-if(kusyB>kusyA){
-kusyNaArch=kusyB;
-otoceno=true;
-}else{
-kusyNaArch=kusyA;
-}
+if(kusyB>kusyA){kusyNaArch=kusyB;otoceno=true;}
+else{kusyNaArch=kusyA;}
 
 if(kusyNaArch<1)return;
 
@@ -233,13 +229,22 @@ document.getElementById("akceBox").innerHTML=
 "<div class='actionBox'>"+
 "<b>📦 Materiál</b><br><br>"+
 "Potřebujete: <b>"+potrebneArchy+" ks</b> archů lepenky.<br><br>"+
-"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
+"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a><br><br>"+
+"<div style='font-size:14px;color:#555;'>👉 Do košíku přidejte <b>"+potrebneArchy+" ks</b> lepenky.</div>"+
 "</div>"+
 "<div class='actionBox'>"+
 "<b>✂ Řezání na míru</b><br><br>"+
 "Množství nastavte na: <b style='font-size:18px;'>"+cenaRez+"</b><br><br>"+
-"<button class='copyBtn' onclick='kopirovat(this)'>📋 Zkopírovat specifikaci</button><br>"+
-"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a>"+
+"<button class='copyBtn' onclick='kopirovat(this)'>📋 1. Zkopírovat specifikaci</button><br>"+
+"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>2. Otevřít produkt Řezání</a><br><br>"+
+"<div style='background:#fff8e1;padding:12px;border-radius:8px;border:1px solid #ffe082;font-size:14px;'>"+
+"<b>Jak správně objednat:</b><br><br>"+
+"1️⃣ Zkopírujte specifikaci<br>"+
+"2️⃣ Otevřete produkt Řezání<br>"+
+"3️⃣ Nastavte množství = <b>"+cenaRez+"</b><br>"+
+"4️⃣ Vložte text do pole <b>Poznámka k produktu</b><br>"+
+"5️⃣ Přidejte do košíku"+
+"</div>"+
 "</div>"+
 "</div>";
 
@@ -251,7 +256,7 @@ navigator.clipboard.writeText(window.specText);
 btn.innerHTML="✔ Zkopírováno";
 btn.style.background="#2e7d32";
 setTimeout(()=>{
-btn.innerHTML="📋 Zkopírovat specifikaci";
+btn.innerHTML="📋 1. Zkopírovat specifikaci";
 btn.style.background="#555";
 },2000);
 }
