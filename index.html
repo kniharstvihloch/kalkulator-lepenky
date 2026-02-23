@@ -51,7 +51,9 @@ input, select{
 <div class="box" id="vysledek"></div>
 
 <div class="total" id="finalCena">Celková cena: 0 Kč</div>
-
+  
+<button onclick="prejitNaObjednavku()">Přejít na objednávku</button>
+  
 <script>
 
 const ARCH_SIRKA = 500;
@@ -103,7 +105,30 @@ document.getElementById("finalCena").innerHTML =
 
 document.addEventListener("input", spocitat);
 document.addEventListener("change", spocitat);
+  
+function prejitNaObjednavku(){
 
+let sirka = document.getElementById("sirka").value;
+let vyska = document.getElementById("vyska").value;
+let pocet = document.getElementById("pocet").value;
+let tloustka = document.getElementById("tloustka").value;
+let cena = document.getElementById("finalCena").innerText;
+
+if(!sirka || !vyska || !pocet){
+  alert("Nejprve vyplňte všechny údaje.");
+  return;
+}
+
+let url = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru" +
+"?sirka=" + sirka +
+"&vyska=" + vyska +
+"&pocet=" + pocet +
+"&tloustka=" + tloustka +
+"&cena=" + encodeURIComponent(cena);
+
+window.location.href = url;
+
+}
 </script>
 
 </body>
