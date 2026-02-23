@@ -5,90 +5,43 @@
 <title>Konfigurátor řezání lepenky</title>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  max-width: 1100px;
-  margin:40px auto;
-}
-
+body{font-family:Arial,sans-serif;max-width:1100px;margin:40px auto;}
 h2{text-align:center;}
-
 .hidden{display:none;}
 
 .selectGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:20px;
-  margin-top:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;margin-top:30px;
 }
 
 .selectBtn{
-  padding:22px;
-  font-size:17px;
-  font-weight:bold;
-  border-radius:12px;
-  border:none;
-  cursor:pointer;
-  background:#1565c0;
-  color:white;
-  transition:0.3s;
+padding:22px;font-size:17px;font-weight:bold;
+border-radius:12px;border:none;cursor:pointer;
+background:#1565c0;color:white;transition:.3s;
 }
-
-.selectBtn:hover{
-  background:#0d47a1;
-  transform:scale(1.03);
-}
+.selectBtn:hover{background:#0d47a1;transform:scale(1.03);}
 
 .backBtn{
-  background:#777;
-  color:white;
-  padding:8px 14px;
-  border-radius:6px;
-  border:none;
-  cursor:pointer;
-  margin-bottom:20px;
+background:#777;color:white;padding:8px 14px;
+border-radius:6px;border:none;cursor:pointer;margin-bottom:20px;
 }
 
-input, select{
-  padding:8px;
-  margin:6px 0;
-  width:220px;
-}
+input,select{padding:8px;margin:6px 0;width:220px;}
 
-.box{
-  background:#f5f5f5;
-  padding:18px;
-  margin-top:20px;
-  border-radius:10px;
-}
+.box{background:#f5f5f5;padding:18px;margin-top:20px;border-radius:10px;}
 
-.flexWrap{
-  display:flex;
-  gap:20px;
-  margin-top:20px;
-  flex-wrap:wrap;
-}
+.flexWrap{display:flex;gap:20px;margin-top:20px;flex-wrap:wrap;}
 
 .actionBox{
-  flex:1;
-  min-width:300px;
-  background:white;
-  padding:18px;
-  border-radius:10px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+flex:1;min-width:300px;background:white;padding:18px;
+border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,.08);
 }
 
 .bigButton{
-  display:inline-block;
-  padding:14px 20px;
-  margin-top:12px;
-  font-size:16px;
-  font-weight:bold;
-  border-radius:8px;
-  text-decoration:none;
-  cursor:pointer;
-  border:none;
-  transition:0.3s;
+display:inline-block;padding:14px 20px;margin-top:12px;
+font-size:16px;font-weight:bold;border-radius:8px;
+text-decoration:none;cursor:pointer;border:none;transition:.3s;
 }
 
 .blue{background:#1565c0;color:white;}
@@ -98,39 +51,24 @@ input, select{
 .green:hover{background:#1b5e20;}
 
 .copyBtn{
-  background:#555;
-  color:white;
-  padding:8px 14px;
-  border-radius:6px;
-  border:none;
-  cursor:pointer;
-  margin-top:10px;
+background:#555;color:white;padding:8px 14px;
+border-radius:6px;border:none;cursor:pointer;margin-top:10px;
 }
 
-.pulse{
-  animation:pulse 1.8s infinite;
-}
-
+.pulse{animation:pulse 1.8s infinite;}
 @keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(46,125,50,0.7);}
-  70%{box-shadow:0 0 0 12px rgba(46,125,50,0);}
-  100%{box-shadow:0 0 0 0 rgba(46,125,50,0);}
+0%{box-shadow:0 0 0 0 rgba(46,125,50,.7);}
+70%{box-shadow:0 0 0 12px rgba(46,125,50,0);}
+100%{box-shadow:0 0 0 0 rgba(46,125,50,0);}
 }
 
-.total{
-  font-size:24px;
-  font-weight:bold;
-  margin-top:20px;
-}
+.total{font-size:24px;font-weight:bold;margin-top:20px;}
 </style>
 </head>
-
 <body>
 
-<!-- VÝBĚR -->
 <div id="vyber">
 <h2>Vyberte typ lepenky</h2>
-
 <div class="selectGrid">
 <button class="selectBtn" onclick="vybrat('klasik500')">Knihařská lepenka 500×700</button>
 <button class="selectBtn" onclick="vybrat('klasik1000')">Knihařská lepenka 1000×700</button>
@@ -141,23 +79,14 @@ input, select{
 </div>
 </div>
 
-<!-- KALKULÁTOR -->
 <div id="kalkulator" class="hidden">
 
 <button class="backBtn" onclick="zpet()">← Změnit typ lepenky</button>
-
 <h2 id="nadpis"></h2>
 
 <div id="volbaTloustky" class="hidden">
 <label>Síla lepenky:</label><br>
-<select id="tloustka">
-  <option value="14">1 mm (14 Kč / arch)</option>
-  <option value="21">1,5 mm (21 Kč / arch)</option>
-  <option value="25">2 mm (25 Kč / arch)</option>
-  <option value="30">2,5 mm (30 Kč / arch)</option>
-  <option value="35">3 mm (35 Kč / arch)</option>
-  <option value="43">3,5 mm (43 Kč / arch)</option>
-</select><br>
+<select id="tloustka"></select><br>
 </div>
 
 <label>Šířka (mm):</label><br>
@@ -177,58 +106,66 @@ input, select{
 
 <script>
 
-let ARCH_SIRKA=500;
-let ARCH_VYSKA=700;
-let cenaArch=0;
-let urlProdukt="";
 const URL_REZANI="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rezani/rezani/#rating";
 
-function vybrat(typ){
+const PRODUKTY={
+klasik500:{
+nazev:"Knihařská lepenka 500×700",
+sirka:500,vyska:700,
+tloustky:{1:14,1.5:21,2:25,2.5:30,3:35,3.5:43},
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/"
+},
+klasik1000:{
+nazev:"Knihařská lepenka 1000×700",
+sirka:1000,vyska:700,
+tloustky:{1:28,1.5:42,2:49,2.5:59,3:69,3.5:86},
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/"
+},
+sklad500:{
+nazev:"Skládačková lepenka 500×700",
+sirka:500,vyska:700,cena:11,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/"
+},
+sklad1000:{
+nazev:"Skládačková lepenka 1000×700",
+sirka:1000,vyska:700,cena:22,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/"
+},
+rucni500:{
+nazev:"Ruční lepenka 500×700",
+sirka:500,vyska:700,cena:49,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-500-x-700/"
+},
+rucni1000:{
+nazev:"Ruční lepenka 1000×700",
+sirka:1000,vyska:700,cena:98,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-1000-x-700/"
+}
+};
 
+let aktualni=null;
+
+function vybrat(klic){
+aktualni=PRODUKTY[klic];
 document.getElementById("vyber").classList.add("hidden");
 document.getElementById("kalkulator").classList.remove("hidden");
+document.getElementById("nadpis").innerText=aktualni.nazev;
 
 let volba=document.getElementById("volbaTloustky");
+let select=document.getElementById("tloustka");
+select.innerHTML="";
+
+if(aktualni.tloustky){
+volba.classList.remove("hidden");
+for(let t in aktualni.tloustky){
+let opt=document.createElement("option");
+opt.value=t;
+opt.text=t+" mm ("+aktualni.tloustky[t]+" Kč / arch)";
+select.appendChild(opt);
+}
+}else{
 volba.classList.add("hidden");
-
-if(typ==="klasik500"){
-ARCH_SIRKA=500; ARCH_VYSKA=700;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/";
-document.getElementById("nadpis").innerText="Knihařská lepenka 500×700";
-volba.classList.remove("hidden");
 }
-
-if(typ==="klasik1000"){
-ARCH_SIRKA=1000; ARCH_VYSKA=700;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/";
-document.getElementById("nadpis").innerText="Knihařská lepenka 1000×700";
-volba.classList.remove("hidden");
-}
-
-if(typ==="sklad500"){
-ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=10;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/";
-document.getElementById("nadpis").innerText="Skládačková lepenka 500×700";
-}
-
-if(typ==="sklad1000"){
-ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=20;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/";
-document.getElementById("nadpis").innerText="Skládačková lepenka 1000×700";
-}
-
-if(typ==="rucni500"){
-ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=18;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-500-x-700/";
-document.getElementById("nadpis").innerText="Ruční lepenka 500×700";
-}
-
-if(typ==="rucni1000"){
-ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=36;
-urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-1000-x-700/";
-document.getElementById("nadpis").innerText="Ruční lepenka 1000×700";
-}
-
 }
 
 function zpet(){
@@ -238,17 +175,21 @@ document.getElementById("vyber").classList.remove("hidden");
 
 function spocitat(){
 
+if(!aktualni)return;
+
 let sirka=parseFloat(document.getElementById("sirka").value);
 let vyska=parseFloat(document.getElementById("vyska").value);
 let pocet=parseInt(document.getElementById("pocet").value);
 if(!sirka||!vyska||!pocet)return;
 
-if(!document.getElementById("volbaTloustky").classList.contains("hidden")){
-cenaArch=parseFloat(document.getElementById("tloustka").value);
+let cenaArch=aktualni.cena;
+if(aktualni.tloustky){
+let t=document.getElementById("tloustka").value;
+cenaArch=aktualni.tloustky[t];
 }
 
-let kusyA=Math.floor(ARCH_SIRKA/sirka)*Math.floor(ARCH_VYSKA/vyska);
-let kusyB=Math.floor(ARCH_SIRKA/vyska)*Math.floor(ARCH_VYSKA/sirka);
+let kusyA=Math.floor(aktualni.sirka/sirka)*Math.floor(aktualni.vyska/vyska);
+let kusyB=Math.floor(aktualni.sirka/vyska)*Math.floor(aktualni.vyska/sirka);
 let kusyNaArch=Math.max(kusyA,kusyB);
 if(kusyNaArch<1)return;
 
@@ -278,7 +219,7 @@ document.getElementById("akceBox").innerHTML=
 "<div class='actionBox'>"+
 "<b>📦 Materiál</b><br>"+
 "Potřebujete "+potrebneArchy+" ks archů.<br>"+
-"<a href='"+urlProdukt+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
+"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
 "</div>"+
 "<div class='actionBox'>"+
 "<b>✂ Řezání</b><br>"+
@@ -288,7 +229,6 @@ document.getElementById("akceBox").innerHTML=
 "<small>Text vložte do poznámky u produktu Řezání.</small>"+
 "</div>"+
 "</div>";
-
 }
 
 function kopirovat(){
