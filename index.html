@@ -53,6 +53,10 @@ input, select{
 <div class="total" id="finalCena">Celková cena: 0 Kč</div>
   
 <button onclick="prejitNaObjednavku()">Přejít na objednávku</button>
+
+<button onclick="window.open('https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru/', '_blank')">
+Otevřít produkt pro objednání
+</button>
   
 <script>
 
@@ -98,8 +102,19 @@ document.getElementById("vysledek").innerHTML =
 "Cena materiálu: <b>" + cenaMaterial.toFixed(2) + " Kč</b><br>" +
 "Cena řezání: <b>" + cenaRez.toFixed(2) + " Kč</b>";
 
+let finalRounded = Math.round(final);
+
 document.getElementById("finalCena").innerHTML =
-"Celková cena: " + final.toFixed(2) + " Kč";
+"<div style='font-size:22px;font-weight:bold;'>Celková cena: " 
++ finalRounded + " Kč</div>" +
+
+"<div style='margin-top:15px;padding:15px;background:#e8f5e9;border:2px solid #2e7d32;'>" +
+"<strong>👉 Pro objednání:</strong><br>" +
+"Na stránce produktu zadejte do pole <strong>MNOŽSTVÍ</strong> hodnotu:<br><br>" +
+"<span style='font-size:28px;font-weight:bold;color:#2e7d32;'>" 
++ finalRounded + "</span><br><br>" +
+"(Produkt má cenu 1 Kč, množství = výsledná cena v Kč)" +
+"</div>";
 
 }
 
