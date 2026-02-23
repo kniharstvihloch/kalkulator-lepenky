@@ -216,18 +216,35 @@ window.specText=text;
 
 document.getElementById("akceBox").innerHTML=
 "<div class='flexWrap'>"+
+
+// ===== MATERIÁL =====
 "<div class='actionBox'>"+
-"<b>📦 Materiál</b><br>"+
-"Potřebujete "+potrebneArchy+" ks archů.<br>"+
-"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
+"<b>📦 Materiál</b><br><br>"+
+"Potřebujete: <b>"+potrebneArchy+" ks</b> archů lepenky.<br><br>"+
+"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a><br><br>"+
+"<div style='font-size:14px;color:#555;'>"+
+"👉 Do košíku přidejte uvedený počet archů lepenky."+
 "</div>"+
+"</div>"+
+
+// ===== ŘEZÁNÍ =====
 "<div class='actionBox'>"+
-"<b>✂ Řezání</b><br>"+
-"Množství nastavte na: <b>"+cenaRez+"</b><br><br>"+
-"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a><br>"+
-"<button class='copyBtn' onclick='kopirovat()'>📋 Kopírovat specifikaci</button><br><br>"+
-"<small>Text vložte do poznámky u produktu Řezání.</small>"+
+"<b>✂ Řezání na míru</b><br><br>"+
+"Množství nastavte na: <b style='font-size:18px;'>"+cenaRez+"</b><br><br>"+
+
+"<button class='copyBtn' onclick='kopirovat()'>📋 1. Zkopírovat specifikaci</button><br>"+
+"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>2. Přidat řezání do košíku</a><br><br>"+
+
+"<div style='background:#fff8e1;padding:12px;border-radius:8px;border:1px solid #ffe082;font-size:14px;'>"+
+"<b>Postup objednání:</b><br><br>"+
+"1️⃣ Klikněte na <b>Zkopírovat specifikaci</b><br>"+
+"2️⃣ Otevřete produkt Řezání a nastavte množství = <b>"+cenaRez+"</b><br>"+
+"3️⃣ Vložte zkopírovaný text do pole <b>Poznámka k produktu</b><br>"+
+"4️⃣ Přidejte produkt do košíku"+
 "</div>"+
+
+"</div>"+
+
 "</div>";
 }
 
