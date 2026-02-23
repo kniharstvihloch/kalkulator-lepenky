@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Konfigurátor řezání lepenky</title>
+<div id="volbaTloustky">
+<label>Síla lepenky:</label><br>
+<select id="tloustka">
+  <option value="14">1 mm (14 Kč / arch)</option>
+  <option value="21">1,5 mm (21 Kč / arch)</option>
+  <option value="25">2 mm (25 Kč / arch)</option>
+  <option value="30">2,5 mm (30 Kč / arch)</option>
+  <option value="35">3 mm (35 Kč / arch)</option>
+  <option value="43">3,5 mm (43 Kč / arch)</option>
+</select><br>
+</div>
 
 <style>
 body{
@@ -181,7 +192,11 @@ input, select{
 
 let ARCH_SIRKA = 500;
 let ARCH_VYSKA = 700;
-let cenaArch = 0;
+let cenaArch;
+
+if(document.getElementById("volbaTloustky").style.display !== "none"){
+  cenaArch = parseFloat(document.getElementById("tloustka").value);
+}
 let urlProdukt = "";
 
 const URL_REZANI = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rezani/rezani/#rating";
@@ -191,28 +206,36 @@ function vybrat(typ){
 document.getElementById("vyber").classList.add("hidden");
 document.getElementById("kalkulator").classList.remove("hidden");
 
+let volba = document.getElementById("volbaTloustky");
+
 if(typ==="klasik500"){
-ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=25;
+ARCH_SIRKA=500; ARCH_VYSKA=700;
 urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/";
 document.getElementById("nadpis").innerText="Knihařská lepenka 500×700";
+volba.style.display="block";
 }
 
 if(typ==="klasik1000"){
-ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=50;
+ARCH_SIRKA=1000; ARCH_VYSKA=700;
 urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/";
 document.getElementById("nadpis").innerText="Knihařská lepenka 1000×700";
+volba.style.display="block";
 }
 
 if(typ==="sklad500"){
-ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=10;
+ARCH_SIRKA=500; ARCH_VYSKA=700;
+cenaArch=10; // tvoje pevná cena
 urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/";
 document.getElementById("nadpis").innerText="Skládačková lepenka 500×700";
+volba.style.display="none";
 }
 
 if(typ==="sklad1000"){
-ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=20;
+ARCH_SIRKA=1000; ARCH_VYSKA=700;
+cenaArch=20; // tvoje pevná cena
 urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/";
 document.getElementById("nadpis").innerText="Skládačková lepenka 1000×700";
+volba.style.display="none";
 }
 
 }
