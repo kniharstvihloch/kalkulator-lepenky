@@ -111,14 +111,24 @@ function prejitNaObjednavku(){
 let sirka = document.getElementById("sirka").value;
 let vyska = document.getElementById("vyska").value;
 let pocet = document.getElementById("pocet").value;
-let tloustka = document.getElementById("tloustka").value;
-let cena = document.getElementById("finalCena").innerText;
+let cenaText = document.getElementById("finalCena").innerText;
 
 if(!sirka || !vyska || !pocet){
   alert("Nejprve vyplňte všechny údaje.");
   return;
 }
 
+let text =
+"ŘEZÁNÍ NA MÍRU\n" +
+"Rozměr: " + sirka + " × " + vyska + " mm\n" +
+"Počet: " + pocet + " ks\n" +
+cenaText;
+
+alert("Zkopírujte si tuto konfiguraci do poznámky objednávky:\n\n" + text);
+
+window.location.href = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru/";
+
+}
 let url = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700-rezani-na-miru" +
 "?sirka=" + sirka +
 "&vyska=" + vyska +
