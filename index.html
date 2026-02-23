@@ -53,6 +53,7 @@ text-decoration:none;cursor:pointer;border:none;transition:.3s;
 .copyBtn{
 background:#555;color:white;padding:8px 14px;
 border-radius:6px;border:none;cursor:pointer;margin-top:10px;
+transition:.3s;
 }
 
 .pulse{animation:pulse 1.8s infinite;}
@@ -62,7 +63,7 @@ border-radius:6px;border:none;cursor:pointer;margin-top:10px;
 100%{box-shadow:0 0 0 0 rgba(46,125,50,0);}
 }
 
-.total{font-size:24px;font-weight:bold;margin-top:20px;}
+.total{font-size:24px;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -99,7 +100,16 @@ border-radius:6px;border:none;cursor:pointer;margin-top:10px;
 <input type="number" id="pocet" value="1"><br>
 
 <div class="box" id="vysledek"></div>
-<div class="total" id="finalCena">Celková cena: 0 Kč</div>
+
+<div style="display:flex;align-items:center;gap:15px;margin-top:20px;">
+  <div class="total" id="finalCena">Celková cena: 0 Kč</div>
+  <button onclick="window.print()" 
+    style="background:#444;color:white;padding:8px 14px;
+           border:none;border-radius:6px;cursor:pointer;">
+    🖨 Vytisknout
+  </button>
+</div>
+
 <div id="akceBox"></div>
 
 </div>
@@ -109,38 +119,26 @@ border-radius:6px;border:none;cursor:pointer;margin-top:10px;
 const URL_REZANI="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rezani/rezani/#rating";
 
 const PRODUKTY={
-klasik500:{
-nazev:"Knihařská lepenka 500×700",
-sirka:500,vyska:700,
+
+klasik500:{nazev:"Knihařská lepenka 500×700",sirka:500,vyska:700,
 tloustky:{1:14,1.5:21,2:25,2.5:30,3:35,3.5:43},
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/"
-},
-klasik1000:{
-nazev:"Knihařská lepenka 1000×700",
-sirka:1000,vyska:700,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/"},
+
+klasik1000:{nazev:"Knihařská lepenka 1000×700",sirka:1000,vyska:700,
 tloustky:{1:28,1.5:42,2:49,2.5:59,3:69,3.5:86},
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/"
-},
-sklad500:{
-nazev:"Skládačková lepenka 500×700",
-sirka:500,vyska:700,cena:11,
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/"
-},
-sklad1000:{
-nazev:"Skládačková lepenka 1000×700",
-sirka:1000,vyska:700,cena:22,
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/"
-},
-rucni500:{
-nazev:"Ruční lepenka 500×700",
-sirka:500,vyska:700,cena:49,
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-500-x-700/"
-},
-rucni1000:{
-nazev:"Ruční lepenka 1000×700",
-sirka:1000,vyska:700,cena:98,
-url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-1000-x-700/"
-}
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/"},
+
+sklad500:{nazev:"Skládačková lepenka 500×700",sirka:500,vyska:700,cena:11,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/"},
+
+sklad1000:{nazev:"Skládačková lepenka 1000×700",sirka:1000,vyska:700,cena:22,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/"},
+
+rucni500:{nazev:"Ruční lepenka 500×700",sirka:500,vyska:700,cena:49,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-500-x-700/"},
+
+rucni1000:{nazev:"Ruční lepenka 1000×700",sirka:1000,vyska:700,cena:98,
+url:"https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rucni-lepenka/rucni-lepenka-1000-x-700/"}
 };
 
 let aktualni=null;
@@ -190,7 +188,17 @@ cenaArch=aktualni.tloustky[t];
 
 let kusyA=Math.floor(aktualni.sirka/sirka)*Math.floor(aktualni.vyska/vyska);
 let kusyB=Math.floor(aktualni.sirka/vyska)*Math.floor(aktualni.vyska/sirka);
-let kusyNaArch=Math.max(kusyA,kusyB);
+
+let kusyNaArch;
+let otoceno=false;
+
+if(kusyB>kusyA){
+kusyNaArch=kusyB;
+otoceno=true;
+}else{
+kusyNaArch=kusyA;
+}
+
 if(kusyNaArch<1)return;
 
 let potrebneArchy=Math.ceil(pocet/kusyNaArch);
@@ -203,11 +211,17 @@ if(pocet>=101)cenaRezZaKus=1;
 let cenaRez=pocet*cenaRezZaKus;
 let final=cenaMaterial+cenaRez;
 
+let infoOtoceni="";
+if(otoceno){
+infoOtoceni="<br><span style='color:#2e7d32;font-weight:bold;'>Rozměr byl automaticky otočen pro lepší využití materiálu.</span>";
+}
+
 document.getElementById("vysledek").innerHTML=
 "Na jeden arch: <b>"+kusyNaArch+" ks</b><br>"+
 "Potřebné archy: <b>"+potrebneArchy+"</b><br>"+
 "Cena materiálu: <b>"+cenaMaterial+" Kč</b><br>"+
-"Cena řezání: <b>"+cenaRez+" Kč</b>";
+"Cena řezání: <b>"+cenaRez+" Kč</b>"+
+infoOtoceni;
 
 document.getElementById("finalCena").innerHTML="Celková cena: "+Math.round(final)+" Kč";
 
@@ -216,45 +230,34 @@ window.specText=text;
 
 document.getElementById("akceBox").innerHTML=
 "<div class='flexWrap'>"+
-
-// ===== MATERIÁL =====
 "<div class='actionBox'>"+
 "<b>📦 Materiál</b><br><br>"+
 "Potřebujete: <b>"+potrebneArchy+" ks</b> archů lepenky.<br><br>"+
-"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a><br><br>"+
-"<div style='font-size:14px;color:#555;'>"+
-"👉 Do košíku přidejte uvedený počet archů lepenky."+
+"<a href='"+aktualni.url+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
 "</div>"+
-"</div>"+
-
-// ===== ŘEZÁNÍ =====
 "<div class='actionBox'>"+
 "<b>✂ Řezání na míru</b><br><br>"+
 "Množství nastavte na: <b style='font-size:18px;'>"+cenaRez+"</b><br><br>"+
-
-"<button class='copyBtn' onclick='kopirovat()'>📋 1. Zkopírovat specifikaci</button><br>"+
-"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>2. Přidat řezání do košíku</a><br><br>"+
-
-"<div style='background:#fff8e1;padding:12px;border-radius:8px;border:1px solid #ffe082;font-size:14px;'>"+
-"<b>Postup objednání:</b><br><br>"+
-"1️⃣ Klikněte na <b>Zkopírovat specifikaci</b><br>"+
-"2️⃣ Otevřete produkt Řezání a nastavte množství = <b>"+cenaRez+"</b><br>"+
-"3️⃣ Vložte zkopírovaný text do pole <b>Zkopírované specifikace</b><br>"+
-"4️⃣ Přidejte produkt do košíku"+
+"<button class='copyBtn' onclick='kopirovat(this)'>📋 Zkopírovat specifikaci</button><br>"+
+"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a>"+
 "</div>"+
-
-"</div>"+
-
 "</div>";
+
+document.getElementById("finalCena").scrollIntoView({behavior:"smooth",block:"center"});
 }
 
-function kopirovat(){
+function kopirovat(btn){
 navigator.clipboard.writeText(window.specText);
-alert("Specifikace zkopírována.");
+btn.innerHTML="✔ Zkopírováno";
+btn.style.background="#2e7d32";
+setTimeout(()=>{
+btn.innerHTML="📋 Zkopírovat specifikaci";
+btn.style.background="#555";
+},2000);
 }
 
 document.addEventListener("input",spocitat);
-</script>
 
+</script>
 </body>
 </html>
