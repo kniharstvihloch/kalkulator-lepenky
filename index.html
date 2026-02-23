@@ -2,13 +2,55 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>Kalkulátor řezané lepenky</title>
+<title>Konfigurátor řezání lepenky</title>
 
 <style>
 body{
   font-family: Arial, sans-serif;
-  max-width: 900px;
-  margin: 40px auto;
+  max-width: 1000px;
+  margin:40px auto;
+}
+
+h2{
+  text-align:center;
+}
+
+.hidden{
+  display:none;
+}
+
+.selectGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  margin-top:30px;
+}
+
+.selectBtn{
+  padding:25px;
+  font-size:18px;
+  font-weight:bold;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  background:#1565c0;
+  color:white;
+  transition:0.3s;
+}
+
+.selectBtn:hover{
+  background:#0d47a1;
+  transform:scale(1.03);
+}
+
+.backBtn{
+  background:#777;
+  color:white;
+  padding:8px 14px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  margin-bottom:20px;
 }
 
 input, select{
@@ -40,12 +82,6 @@ input, select{
   box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
 
-.sectionTitle{
-  font-weight:bold;
-  font-size:18px;
-  margin-bottom:10px;
-}
-
 .bigButton{
   display:inline-block;
   padding:14px 20px;
@@ -55,17 +91,8 @@ input, select{
   border-radius:8px;
   text-decoration:none;
   cursor:pointer;
-  transition:0.3s;
   border:none;
-}
-
-.green{
-  background:#2e7d32;
-  color:white;
-}
-
-.green:hover{
-  background:#1b5e20;
+  transition:0.3s;
 }
 
 .blue{
@@ -77,6 +104,15 @@ input, select{
   background:#0d47a1;
 }
 
+.green{
+  background:#2e7d32;
+  color:white;
+}
+
+.green:hover{
+  background:#1b5e20;
+}
+
 .copyBtn{
   background:#555;
   color:white;
@@ -85,10 +121,6 @@ input, select{
   border:none;
   cursor:pointer;
   margin-top:10px;
-}
-
-.copyBtn:hover{
-  background:#333;
 }
 
 .pulse{
@@ -111,17 +143,24 @@ input, select{
 
 <body>
 
-<h2>Kalkulátor řezané knihařské lepenky</h2>
+<!-- KROK 1 – VÝBĚR -->
+<div id="vyber">
+<h2>Vyberte typ lepenky</h2>
 
-<label>Síla lepenky:</label><br>
-<select id="tloustka">
-  <option value="14">1 mm (14 Kč / arch)</option>
-  <option value="21">1,5 mm (21 Kč / arch)</option>
-  <option value="25">2 mm (25 Kč / arch)</option>
-  <option value="30">2,5 mm (30 Kč / arch)</option>
-  <option value="35">3 mm (35 Kč / arch)</option>
-  <option value="43">3,5 mm (43 Kč / arch)</option>
-</select><br>
+<div class="selectGrid">
+<button class="selectBtn" onclick="vybrat('klasik500')">Knihařská lepenka 500×700</button>
+<button class="selectBtn" onclick="vybrat('klasik1000')">Knihařská lepenka 1000×700</button>
+<button class="selectBtn" onclick="vybrat('sklad500')">Skládačková lepenka 500×700</button>
+<button class="selectBtn" onclick="vybrat('sklad1000')">Skládačková lepenka 1000×700</button>
+</div>
+</div>
+
+<!-- KROK 2 – KALKULÁTOR -->
+<div id="kalkulator" class="hidden">
+
+<button class="backBtn" onclick="zpet()">← Změnit typ lepenky</button>
+
+<h2 id="nadpis"></h2>
 
 <label>Šířka (mm):</label><br>
 <input type="number" id="sirka"><br>
@@ -134,106 +173,124 @@ input, select{
 
 <div class="box" id="vysledek"></div>
 <div class="total" id="finalCena">Celková cena: 0 Kč</div>
+<div id="akceBox"></div>
 
-<div id="akceBox" style="display:none;"></div>
+</div>
 
 <script>
 
-const ARCH_SIRKA = 500;
-const ARCH_VYSKA = 700;
+let ARCH_SIRKA = 500;
+let ARCH_VYSKA = 700;
+let cenaArch = 0;
+let urlProdukt = "";
+
+const URL_REZANI = "https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rezani/rezani/#rating";
+
+function vybrat(typ){
+
+document.getElementById("vyber").classList.add("hidden");
+document.getElementById("kalkulator").classList.remove("hidden");
+
+if(typ==="klasik500"){
+ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=25;
+urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/";
+document.getElementById("nadpis").innerText="Knihařská lepenka 500×700";
+}
+
+if(typ==="klasik1000"){
+ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=50;
+urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka1/";
+document.getElementById("nadpis").innerText="Knihařská lepenka 1000×700";
+}
+
+if(typ==="sklad500"){
+ARCH_SIRKA=500; ARCH_VYSKA=700; cenaArch=10;
+urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-500-x-700-mm/";
+document.getElementById("nadpis").innerText="Skládačková lepenka 500×700";
+}
+
+if(typ==="sklad1000"){
+ARCH_SIRKA=1000; ARCH_VYSKA=700; cenaArch=20;
+urlProdukt="https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/skladackova-lepenka/skladackova-lepenka-0-7-mm-1000-x-700-mm/";
+document.getElementById("nadpis").innerText="Skládačková lepenka 1000×700";
+}
+
+}
+
+function zpet(){
+document.getElementById("kalkulator").classList.add("hidden");
+document.getElementById("vyber").classList.remove("hidden");
+}
 
 function spocitat(){
 
-let sirka = parseFloat(document.getElementById("sirka").value);
-let vyska = parseFloat(document.getElementById("vyska").value);
-let pocet = parseInt(document.getElementById("pocet").value);
-let cenaArch = parseFloat(document.getElementById("tloustka").value);
+let sirka=parseFloat(document.getElementById("sirka").value);
+let vyska=parseFloat(document.getElementById("vyska").value);
+let pocet=parseInt(document.getElementById("pocet").value);
 
-if(!sirka || !vyska || !pocet){
-  document.getElementById("vysledek").innerHTML="";
-  document.getElementById("finalCena").innerHTML="Celková cena: 0 Kč";
-  document.getElementById("akceBox").style.display="none";
-  return;
-}
+if(!sirka||!vyska||!pocet)return;
 
-let kusyA = Math.floor(ARCH_SIRKA / sirka) *
-            Math.floor(ARCH_VYSKA / vyska);
+let kusyA=Math.floor(ARCH_SIRKA/sirka)*Math.floor(ARCH_VYSKA/vyska);
+let kusyB=Math.floor(ARCH_SIRKA/vyska)*Math.floor(ARCH_VYSKA/sirka);
+let kusyNaArch=Math.max(kusyA,kusyB);
 
-let kusyB = Math.floor(ARCH_SIRKA / vyska) *
-            Math.floor(ARCH_VYSKA / sirka);
+if(kusyNaArch<1)return;
 
-let kusyNaArch = Math.max(kusyA, kusyB);
+let potrebneArchy=Math.ceil(pocet/kusyNaArch);
+let cenaMaterial=potrebneArchy*cenaArch;
 
-if(kusyNaArch < 1){
-  document.getElementById("vysledek").innerHTML="Rozměr se nevejde do archu 500×700 mm.";
-  document.getElementById("finalCena").innerHTML="Celková cena: 0 Kč";
-  document.getElementById("akceBox").style.display="none";
-  return;
-}
+let cenaRezZaKus=3;
+if(pocet>=11&&pocet<=100)cenaRezZaKus=2;
+if(pocet>=101)cenaRezZaKus=1;
 
-let potrebneArchy = Math.ceil(pocet / kusyNaArch);
-let cenaMaterial = potrebneArchy * cenaArch;
+let cenaRez=pocet*cenaRezZaKus;
+let final=cenaMaterial+cenaRez;
 
-let cenaRezZaKus = 3;
-if(pocet >= 11 && pocet <= 100) cenaRezZaKus = 2;
-if(pocet >= 101) cenaRezZaKus = 1;
-
-let cenaRez = pocet * cenaRezZaKus;
-let final = cenaMaterial + cenaRez;
-
-document.getElementById("vysledek").innerHTML =
-"Na jeden arch se vejde: <b>"+kusyNaArch+" ks</b><br>" +
-"Potřebný počet archů: <b>"+potrebneArchy+"</b><br>" +
-"Cena materiálu: <b>"+cenaMaterial+" Kč</b><br>" +
+document.getElementById("vysledek").innerHTML=
+"Na jeden arch: <b>"+kusyNaArch+" ks</b><br>"+
+"Potřebné archy: <b>"+potrebneArchy+"</b><br>"+
+"Cena materiálu: <b>"+cenaMaterial+" Kč</b><br>"+
 "Cena řezání: <b>"+cenaRez+" Kč</b>";
 
-document.getElementById("finalCena").innerHTML =
-"Celková cena: "+Math.round(final)+" Kč";
+document.getElementById("finalCena").innerHTML="Celková cena: "+Math.round(final)+" Kč";
 
-let specifikace =
-"ŘEZÁNÍ NA MÍRU\n" +
-"Rozměr: "+sirka+" × "+vyska+" mm\n" +
-"Počet kusů: "+pocet+"\n" +
-"Síla: "+document.getElementById("tloustka").selectedOptions[0].text+"\n" +
-"Počet archů: "+potrebneArchy+"\n" +
+let text=
+"ŘEZÁNÍ NA MÍRU\n"+
+"Rozměr: "+sirka+" × "+vyska+" mm\n"+
+"Počet: "+pocet+"\n"+
+"Počet archů: "+potrebneArchy+"\n"+
 "Cena řezání: "+cenaRez+" Kč";
 
-document.getElementById("akceBox").style.display="block";
-document.getElementById("akceBox").innerHTML =
+window.specText=text;
 
-"<div class='flexWrap'>" +
+document.getElementById("akceBox").innerHTML=
 
-"<div class='actionBox'>" +
-"<div class='sectionTitle'>📦 Lepenka</div>" +
-"Potřebujete <b>"+potrebneArchy+" ks</b> archů 500×700 mm.<br>" +
-"<a href='https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/kniharska-lepenka-2/kniharska-lepenka-500-x-700/' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>" +
-"</div>" +
+"<div class='flexWrap'>"+
 
-"<div class='actionBox'>" +
-"<div class='sectionTitle'>✂ Řezání na míru</div>" +
-"Cena řezání: <b>"+cenaRez+" Kč</b><br>" +
-"U produktu zadejte množství: <b>"+cenaRez+"</b><br><br>" +
-"<strong>Postup:</strong><br>" +
-"1️⃣ Klikněte na tlačítko níže<br>" +
-"2️⃣ Zadejte množství = cena řezání<br>" +
-"3️⃣ Vložte zkopírovaný text do poznámky objednávky<br>" +
-"<a href='https://www.kniharstvijihlava.cz/e-shop/kniharske-lepenky/rezani/rezani/#rating' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a>" +
-"<br><button class='copyBtn' onclick='kopirovat()'>📋 Kopírovat specifikaci</button>" +
-"</div>" +
+"<div class='actionBox'>"+
+"<b>📦 Materiál</b><br>"+
+"Potřebujete "+potrebneArchy+" ks archů.<br>"+
+"<a href='"+urlProdukt+"' target='_blank' class='bigButton blue'>Přidat lepenku do košíku</a>"+
+"</div>"+
+
+"<div class='actionBox'>"+
+"<b>✂ Řezání</b><br>"+
+"Množství zadejte: <b>"+cenaRez+"</b><br><br>"+
+"<a href='"+URL_REZANI+"' target='_blank' class='bigButton green pulse'>Přidat řezání do košíku</a><br>"+
+"<button class='copyBtn' onclick='kopirovat()'>📋 Kopírovat specifikaci</button><br><br>"+
+"<small>Text vložte do poznámky u produktu Řezání.</small>"+
+"</div>"+
 
 "</div>";
-
-window.aktualniText = specifikace;
 
 }
 
 function kopirovat(){
-navigator.clipboard.writeText(window.aktualniText);
-alert("Specifikace zkopírována. Vložte ji do poznámky u produktu Řezání.");
+navigator.clipboard.writeText(window.specText);
+alert("Specifikace zkopírována.");
 }
 
-document.addEventListener("input", spocitat);
-document.addEventListener("change", spocitat);
+document.addEventListener("input",spocitat);
 
 </script>
 
