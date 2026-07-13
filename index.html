@@ -181,9 +181,11 @@ let pocet=parseInt(document.getElementById("pocet").value);
 if(!sirka||!vyska||!pocet)return;
 
 let cenaArch=aktualni.cena;
+let silaLepenkyRadek="";
 if(aktualni.tloustky){
 let t=document.getElementById("tloustka").value;
 cenaArch=aktualni.tloustky[t];
+silaLepenkyRadek="\nSíla lepenky: "+t+" mm";
 }
 
 let kusyA=Math.floor(aktualni.sirka/sirka)*Math.floor(aktualni.vyska/vyska);
@@ -221,7 +223,7 @@ infoOtoceni;
 
 document.getElementById("finalCena").innerHTML="Celková cena: "+Math.round(final)+" Kč";
 
-let text="ŘEZÁNÍ NA MÍRU\nRozměr: "+sirka+" × "+vyska+" mm\nPočet: "+pocet+"\nPočet archů: "+potrebneArchy+"\nCena řezání: "+cenaRez+" Kč";
+let text="ŘEZÁNÍ NA MÍRU\nMateriál: "+aktualni.nazev+"\nRozměr: "+sirka+" × "+vyska+" mm"+silaLepenkyRadek+"\nPočet: "+pocet+"\nPočet archů: "+potrebneArchy+"\nCena řezání: "+cenaRez+" Kč";
 window.specText=text;
 
 document.getElementById("akceBox").innerHTML=
