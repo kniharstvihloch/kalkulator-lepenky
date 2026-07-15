@@ -202,9 +202,12 @@ if(kusyNaArch<1)return;
 let potrebneArchy=Math.ceil(pocet/kusyNaArch);
 let cenaMaterial=potrebneArchy*cenaArch;
 
-let cenaRezZaKus=3;
-if(pocet>=11&&pocet<=100)cenaRezZaKus=2;
-if(pocet>=101)cenaRezZaKus=1;
+let cenaRezZaKus=10;
+if(pocet>=11&&pocet<=50)cenaRezZaKus=6;
+if(pocet>=51&&pocet<=100)cenaRezZaKus=4;
+if(pocet>=101&&pocet<=500)cenaRezZaKus=3;
+if(pocet>=501&&pocet<=999)cenaRezZaKus=2;
+if(pocet>=1000)cenaRezZaKus=1.5;
 
 let cenaRez=pocet*cenaRezZaKus;
 let final=cenaMaterial+cenaRez;
